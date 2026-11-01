@@ -1,0 +1,201 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewBag.Title - Quản Trị Phong Cách Xanh</title>
+    <script src="https://kit.fontawesome.com/2ba83b9efc.js" crossorigin="anonymous"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f8fafc;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* --- NAVBAR ADMIN --- */
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 40px;
+            background-color: #0b132b;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            width: 100%;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .logo-text {
+            font-size: 20px;
+            font-weight: 600;
+            color: #ffffff;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links ul {
+            display: flex;
+            list-style: none;
+            gap: 20px;
+        }
+
+        .nav-item {
+            text-decoration: none;
+            color: #cbd5e1;
+            font-weight: 500;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: color 0.2s ease;
+            white-space: nowrap;
+        }
+
+            .nav-item:hover, .nav-item.active {
+                color: #60a5fa;
+            }
+
+        .right-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            white-space: nowrap;
+        }
+
+        .admin-badge {
+            background-color: rgba(37, 99, 235, 0.2);
+            color: #60a5fa;
+            padding: 6px 12px;
+            border-radius: 6px;
+            font-size: 13px;
+            font-weight: 600;
+            border: 1px solid rgba(37, 99, 235, 0.3);
+        }
+
+        .user-icons {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .icon-btn {
+            color: #cbd5e1;
+            font-size: 18px;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+            .icon-btn:hover {
+                color: #60a5fa;
+            }
+
+        /* --- MAIN CONTENT CONTAINER --- */
+        .main-container {
+            flex: 1;
+            padding: 40px;
+            max-width: 1400px;
+            width: 100%;
+            margin: 0 auto;
+        }
+
+        /* --- FOOTER ADMIN --- */
+        .site-footer {
+            background-color: #0b132b;
+            color: #ffffff;
+            padding: 30px 60px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: auto;
+        }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .footer-info h4 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 6px;
+            color: #f1f5f9;
+        }
+
+        .footer-info p {
+            font-size: 13px;
+            color: #94a3b8;
+        }
+
+        .copyright {
+            font-size: 13px;
+            color: #94a3b8;
+            text-align: right;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- THANH ĐIỀU HƯỚNG QUẢN TRỊ -->
+    <div class="navbar">
+        <div class="logo" onclick="location.href='@Url.Action("Index", "Home1", new { area = "Admin" })'">
+            <svg class="logo-icon" viewBox="0 0 100 100" width="30" height="30">
+                <circle cx="50" cy="50" r="45" fill="none" stroke="#fff" stroke-width="4" />
+                <path d="M 30,50 Q 50,20 70,50 T 30,50" fill="none" stroke="#fff" stroke-width="4" />
+            </svg>
+            <span class="logo-text">Admin Panel</span>
+        </div>
+
+        <nav class="nav-links">
+            <ul>
+                <li><a href="@Url.Action("Index", "Home1", new { area = "Admin" })" class="nav-item"><i class="fa-solid fa-house"></i> Home</a></li>
+                <li><a href="@Url.Action("Index", "Categories", new { area = "Admin" })" class="nav-item"><i class="fa-solid fa-list"></i> Danh mục</a></li>
+                <li><a href="@Url.Action("Index", "Products", new { area = "Admin" })" class="nav-item"><i class="fa-solid fa-box"></i> Sản phẩm</a></li>
+                <li><a href="@Url.Action("Index", "Inventory", new { area = "Admin" })" class="nav-item"><i class="fa-solid fa-warehouse"></i> Kho hàng</a></li>
+                <li><a href="@Url.Action("Index", "Users", new { area = "Admin" })" class="nav-item"><i class="fa-solid fa-user-tie"></i> Nhân viên</a></li>
+                <li><a href="@Url.Action("Index1", "Users", new { area = "Admin" })" class="nav-item"><i class="fa-solid fa-users"></i> Khách hàng</a></li>
+                <li><a href="@Url.Action("Index", "Orders", new { area = "Admin" })" class="nav-item"><i class="fa-solid fa-file-invoice-dollar"></i> Đơn hàng</a></li>
+            </ul>
+        </nav>
+
+        <div class="right-section">
+            <span class="admin-badge"><i class="fa-solid fa-shield-halved"></i> Quản trị viên</span>
+            <div class="user-icons">
+                <!-- Nút chuyển hướng về trang chủ Customer (đã thay link và icon cho trực quan) -->
+                <a href="@Url.Action("Index", "Home2", new { area = "Customer" })" class="icon-btn" title="Về trang chủ Customer">
+                    <i class="fa-solid fa-store"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- NỘI DUNG TRANG QUẢN TRỊ -->
+    <div class="main-container">
+        @RenderBody()
+    </div>
+
+    <!-- FOOTER QUẢN TRỊ -->
+    <footer class="site-footer">
+        <div class="footer-bottom">
+            <div class="footer-info">
+                <h4>HỆ THỐNG QUẢN TRỊ - PHONG CÁCH XANH</h4>
+                <p>Contact: Support Team | Nhóm phát triển ứng dụng</p>
+            </div>
+            <div class="copyright">
+                © 2026, Phong Cách Xanh. All rights reserved.
+            </div>
+        </div>
+    </footer>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

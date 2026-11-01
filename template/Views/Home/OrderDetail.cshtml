@@ -1,0 +1,219 @@
+﻿@{
+    ViewBag.Title = "Chi tiết đơn hàng";
+    Layout = "~/Views/Home/mau1.cshtml";
+}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chi tiết đơn hàng - Phong Cách Xanh</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f7;
+            color: #333;
+            padding: 40px 20px;
+        }
+
+        .order-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #fff;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 20px;
+            margin-bottom: 20px;
+        }
+
+        .order-title h1 {
+            font-size: 22px;
+            font-weight: 700;
+            color: #111;
+        }
+
+        .order-status {
+            background-color: #e0f2fe;
+            color: #0369a1;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .product-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 15px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+            .product-item:last-child {
+                border-bottom: none;
+            }
+
+        .product-img {
+            width: 70px;
+            height: 70px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid #eee;
+        }
+
+        .product-info {
+            flex: 1;
+        }
+
+        .product-title {
+            font-size: 15px;
+            font-weight: 600;
+            color: #111;
+            margin-bottom: 4px;
+        }
+
+        .product-qty {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .product-price {
+            font-size: 15px;
+            font-weight: 600;
+            color: #111;
+        }
+
+        .order-summary {
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 2px solid #eee;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 10px;
+        }
+
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            font-size: 18px;
+            font-weight: 700;
+            color: #111;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+
+        .btn-back {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 12px 24px;
+            background-color: #2b78a2;
+            color: #fff;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            font-size: 14px;
+            text-align: center;
+        }
+
+            .btn-back:hover {
+                background-color: #1f5777;
+            }
+    </style>
+</head>
+<body>
+
+    <div class="order-container">
+        <div class="order-header">
+            <div class="order-title">
+                <h1>Chi tiết đơn hàng</h1>
+            </div>
+            <div class="order-status">
+                <i class="fa-solid fa-circle-check"></i> Đã xác nhận
+            </div>
+        </div>
+
+        <!-- Danh sách sản phẩm -->
+        <div id="orderItems">
+            <!-- Đổ sản phẩm từ checkoutData tại đây -->
+        </div>
+
+        <!-- Tóm tắt chi phí -->
+        <div class="order-summary">
+            <div class="summary-row">
+                <span>Tạm tính:</span>
+                <span id="subtotalVal">0 ₫</span>
+            </div>
+            <div class="summary-row">
+                <span>Phí vận chuyển:</span>
+                <span>Miễn phí</span>
+            </div>
+            <div class="summary-total">
+                <span>Tổng cộng:</span>
+                <span id="totalVal">0 ₫</span>
+            </div>
+        </div>
+
+        <a href="/Home/Index" class="btn-back">
+            <i class="fa-solid fa-arrow-left"></i> Tiếp tục mua sắm
+        </a>
+    </div>
+
+    <!-- Script đọc dữ liệu sản phẩm từ checkoutData -->
+    <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                // Đọc dữ liệu từ biến riêng biệt "lastOrder"
+                const orderData = JSON.parse(localStorage.getItem("lastOrder"));
+
+                if (!orderData || !orderData.items || orderData.items.length === 0) {
+                    document.getElementById("orderItems").innerHTML = "<p style='text-align:center; color:#888; padding:20px;'>Không có sản phẩm trong đơn hàng.</p>";
+                    return;
+                }
+
+                let itemsHTML = "";
+                let subtotal = orderData.subtotal || 0;
+
+                orderData.items.forEach(item => {
+                    let priceNum = Number(item.price) || 0;
+                    let qty = Number(item.quantity) || 1;
+                    let itemTotal = priceNum * qty;
+
+                    itemsHTML += `
+                        <div class="product-item">
+                            <img src="${item.image || 'https://via.placeholder.com/70'}" alt="${item.title}" class="product-img">
+                            <div class="product-info">
+                                <div class="product-title">${item.title}</div>
+                                <div class="product-qty">Đơn giá: ${priceNum.toLocaleString('vi-VN')} ₫ | Số lượng: ${qty}</div>
+                            </div>
+                            <div class="product-price">${itemTotal.toLocaleString('vi-VN')} ₫</div>
+                        </div>
+                    `;
+                });
+
+                document.getElementById("orderItems").innerHTML = itemsHTML;
+                document.getElementById("subtotalVal").innerText = subtotal.toLocaleString('vi-VN') + " ₫";
+                document.getElementById("totalVal").innerText = subtotal.toLocaleString('vi-VN') + " ₫";
+            });
+    </script>
+</body>
+</html>

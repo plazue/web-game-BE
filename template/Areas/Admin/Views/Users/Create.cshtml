@@ -1,0 +1,185 @@
+﻿@model template.Models.User
+@{
+    ViewBag.Title = "Thêm mới tài khoản";
+    Layout = "~/Areas/Admin/Views/Shared/_adminLayout.cshtml";
+}
+
+<style>
+    /* --- CSS QUẢN LÝ TÀI KHOẢN (FORM CREATE) --- */
+    .admin-form-card {
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        padding: 28px;
+        border: 1px solid #e2e8f0;
+        margin-bottom: 30px;
+    }
+
+    .admin-form-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 16px;
+        margin-bottom: 24px;
+        border-bottom: 2px solid #e2efda;
+    }
+
+    .admin-form-title {
+        font-size: 22px;
+        font-weight: 700;
+        color: #1e293b;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin: 0;
+    }
+
+    .admin-label {
+        font-weight: 600;
+        color: #334155;
+        font-size: 14px;
+    }
+
+    .admin-input {
+        width: 100%;
+        padding: 10px 14px;
+        font-size: 14px;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        background-color: #f8fafc;
+        color: #1e293b;
+        transition: all 0.2s ease;
+    }
+
+        .admin-input:focus {
+            outline: none;
+            border-color: #2563eb;
+            background-color: #ffffff;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+
+    .admin-alert-danger {
+        background-color: #fef2f2;
+        border: 1px solid #fecaca;
+        color: #991b1b;
+        padding: 12px 16px;
+        border-radius: 6px;
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+
+    .btn-admin-submit {
+        background-color: #2563eb;
+        color: #ffffff !important;
+        font-weight: 600;
+        font-size: 14px;
+        padding: 9px 24px;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .btn-admin-submit:hover {
+            background-color: #1d4ed8;
+            box-shadow: 0 4px 6px rgba(37, 99, 235, 0.25);
+        }
+
+    .btn-admin-back {
+        background-color: #f1f5f9;
+        color: #475569 !important;
+        font-weight: 600;
+        font-size: 13px;
+        padding: 7px 16px;
+        border-radius: 6px;
+        border: 1px solid #cbd5e1;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+        .btn-admin-back:hover {
+            background-color: #e2e8f0;
+            color: #1e293b !important;
+        }
+</style>
+
+<div class="admin-form-card">
+    <div class="admin-form-header">
+        <h3 class="admin-form-title">
+            <i class="fa-solid fa-user-plus text-primary"></i> THÊM MỚI TÀI KHOẢN
+        </h3>
+        @Html.ActionLink("Quay lại danh sách", "Index", null, new { @class = "btn-admin-back" })
+    </div>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        if (!ViewData.ModelState.IsValid)
+        {
+            <div class="admin-alert-danger">
+                @Html.ValidationSummary(true, "")
+            </div>
+        }
+
+        <div class="row admin-form-group align-items-center mb-3">
+            @Html.LabelFor(model => model.Username, "Tên đăng nhập", htmlAttributes: new { @class = "col-md-2 admin-label" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Username, new { htmlAttributes = new { @class = "admin-input", placeholder = "Nhập tên đăng nhập..." } })
+                @Html.ValidationMessageFor(model => model.Username, "", new { @class = "text-danger small mt-1 d-block" })
+            </div>
+        </div>
+
+        <div class="row admin-form-group align-items-center mb-3">
+            @Html.LabelFor(model => model.Email, "Email", htmlAttributes: new { @class = "col-md-2 admin-label" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Email, new { htmlAttributes = new { @class = "admin-input", placeholder = "Nhập địa chỉ email..." } })
+                @Html.ValidationMessageFor(model => model.Email, "", new { @class = "text-danger small mt-1 d-block" })
+            </div>
+        </div>
+
+        <div class="row admin-form-group align-items-center mb-3">
+            @Html.LabelFor(model => model.Password, "Mật khẩu", htmlAttributes: new { @class = "col-md-2 admin-label" })
+            <div class="col-md-10">
+                @Html.PasswordFor(model => model.Password, new { @class = "admin-input", placeholder = "Nhập mật khẩu..." })
+                @Html.ValidationMessageFor(model => model.Password, "", new { @class = "text-danger small mt-1 d-block" })
+            </div>
+        </div>
+
+        <!-- Chuyển Role thành DropDownList chọn Customer / Admin -->
+        <div class="row admin-form-group align-items-center mb-3">
+            @Html.LabelFor(model => model.Role, "Quyền hạn (Role)", htmlAttributes: new { @class = "col-md-2 admin-label" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.Role, new SelectList(new[]
+                {
+                    new { Text = "Customer (Khách hàng)", Value = "Customer" },
+                    new { Text = "Admin (Quản trị viên)", Value = "Admin" }
+                }, "Value", "Text"), "-- Chọn quyền hạn --", new { @class = "admin-input" })
+                @Html.ValidationMessageFor(model => model.Role, "", new { @class = "text-danger small mt-1 d-block" })
+            </div>
+        </div>
+
+        <div class="row admin-form-group align-items-center mb-3">
+            @Html.LabelFor(model => model.CreatedAt, "Ngày tạo", htmlAttributes: new { @class = "col-md-2 admin-label" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.CreatedAt, new { htmlAttributes = new { @class = "admin-input", @type = "date" } })
+                @Html.ValidationMessageFor(model => model.CreatedAt, "", new { @class = "text-danger small mt-1 d-block" })
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-md-10 offset-md-2">
+                <button type="submit" class="btn-admin-submit">
+                    <i class="fa-solid fa-save"></i> Tạo tài khoản
+                </button>
+            </div>
+        </div>
+    }
+</div>
+
+<FollowUp>
+    Bạn có muốn tôi cập nhật nốt giao diện trang **Edit.cshtml** cho phần tài khoản này để đồng bộ luôn không?
+</FollowUp>

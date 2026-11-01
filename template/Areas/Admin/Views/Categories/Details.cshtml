@@ -1,0 +1,116 @@
+﻿@model template.Models.Category
+@{
+    ViewBag.Title = "Chi tiết danh mục";
+    Layout = "~/Areas/Admin/Views/Shared/_adminLayout.cshtml";
+}
+
+<style>
+    /* --- CSS QUẢN LÝ DANH MỤC (DETAILS) --- */
+    .admin-card {
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        padding: 28px;
+        border: 1px solid #e2e8f0;
+        margin-bottom: 30px;
+    }
+
+    .admin-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 16px;
+        margin-bottom: 24px;
+        border-bottom: 2px solid #e2efda;
+    }
+
+    .admin-title {
+        font-size: 22px;
+        font-weight: 700;
+        color: #1e293b;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin: 0;
+    }
+
+    .admin-label {
+        font-weight: 600;
+        color: #334155;
+        font-size: 14px;
+    }
+
+    .btn-admin-edit {
+        background-color: #2563eb;
+        color: #ffffff !important;
+        font-weight: 600;
+        font-size: 13px;
+        padding: 8px 18px;
+        border-radius: 6px;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+        .btn-admin-edit:hover {
+            background-color: #1d4ed8;
+            box-shadow: 0 4px 6px rgba(37, 99, 235, 0.25);
+        }
+
+    .btn-admin-back {
+        background-color: #f1f5f9;
+        color: #475569 !important;
+        font-weight: 600;
+        font-size: 13px;
+        padding: 8px 18px;
+        border-radius: 6px;
+        border: 1px solid #cbd5e1;
+        text-decoration: none;
+        transition: all 0.2s ease;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+        .btn-admin-back:hover {
+            background-color: #e2e8f0;
+            color: #1e293b !important;
+        }
+</style>
+
+<div class="admin-card">
+    <div class="admin-header">
+        <h3 class="admin-title">
+            <i class="fa-solid fa-folder-open text-primary me-2"></i> CHI TIẾT DANH MỤC
+        </h3>
+        <div>
+            <a href="@Url.Action("Edit", new { id = Model.CategoryID })" class="btn-admin-edit me-2">
+                <i class="fa-solid fa-pen-to-square"></i> Cập nhật
+            </a>
+            @Html.ActionLink("Quay lại danh sách", "Index", null, new { @class = "btn-admin-back" })
+        </div>
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <dl class="row mb-0">
+                <dt class="col-sm-3 col-md-2 admin-label py-2">Mã danh mục:</dt>
+                <dd class="col-sm-9 col-md-10 fw-bold text-dark py-2">#@Model.CategoryID</dd>
+
+                <dt class="col-sm-3 col-md-2 admin-label py-2">Tên danh mục:</dt>
+                <dd class="col-sm-9 col-md-10 fw-semibold text-primary py-2">@Html.DisplayFor(model => model.CategoryName)</dd>
+
+                <dt class="col-sm-3 col-md-2 admin-label py-2">Đường dẫn (Slug):</dt>
+                <dd class="col-sm-9 col-md-10 text-muted py-2">
+                    <code>@(string.IsNullOrEmpty(Model.Slug) ? "Chưa có slug" : Model.Slug)</code>
+                </dd>
+            </dl>
+        </div>
+    </div>
+</div>
+
+<FollowUp>
+    Bạn có muốn tôi làm nốt giao diện cho các trang **Index**, **Create**, **Edit** hay **Delete** của phần Danh mục (`Categories`) này không?
+</FollowUp>

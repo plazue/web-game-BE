@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="7a795d5ba2034fcbba6810807a7ccbc8" Name="Diagram1">
+        <EntityTypeShape EntityType="PhongCachXanhDBModel.Category" Width="1.5" PointX="0.75" PointY="5.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="PhongCachXanhDBModel.OrderDetail" Width="1.5" PointX="5.25" PointY="2.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="PhongCachXanhDBModel.Order" Width="1.5" PointX="3" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="PhongCachXanhDBModel.ProductImage" Width="1.5" PointX="5.25" PointY="6.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="PhongCachXanhDBModel.Product" Width="1.5" PointX="3" PointY="4.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="PhongCachXanhDBModel.ProductSpec" Width="1.5" PointX="5.25" PointY="9.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="PhongCachXanhDBModel.User" Width="1.5" PointX="0.75" PointY="8.125" IsExpanded="true" />
+        <AssociationConnector Association="PhongCachXanhDBModel.FK__Products__Catego__5441852A" ManuallyRouted="false" />
+        <AssociationConnector Association="PhongCachXanhDBModel.FK__OrderDeta__Order__628FA481" ManuallyRouted="false" />
+        <AssociationConnector Association="PhongCachXanhDBModel.FK__OrderDeta__Produ__6383C8BA" ManuallyRouted="false" />
+        <AssociationConnector Association="PhongCachXanhDBModel.FK__Orders__UserID__5FB337D6" ManuallyRouted="false" />
+        <AssociationConnector Association="PhongCachXanhDBModel.FK__ProductIm__Produ__5812160E" ManuallyRouted="false" />
+        <AssociationConnector Association="PhongCachXanhDBModel.FK__ProductSp__Produ__5AEE82B9" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="PhongCachXanhDBModel.sysdiagram" Width="1.5" PointX="7.375" PointY="0.75" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

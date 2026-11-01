@@ -1,0 +1,499 @@
+﻿@{
+    ViewBag.Title = "categories";
+    Layout = "~/Views/Home/mau1.cshtml";
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Danh mục sản phẩm</title>
+    <script src="https://kit.fontawesome.com/2ba83b9efc.js" crossorigin="anonymous"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: #f5f6f8;
+            color: #151515;
+        }
+
+        .category-wrap {
+            width: min(1180px, 92%);
+            margin: 0 auto;
+            padding: 40px 0 60px;
+        }
+
+        /* PAGE HEADER */
+        .page-header {
+            margin-bottom: 30px;
+        }
+
+        .page-header h1 {
+            font-size: clamp(28px, 3vw, 36px);
+            margin-bottom: 8px;
+        }
+
+        .page-header p {
+            color: #717680;
+            font-size: 14px;
+        }
+
+        /* LAYOUT: FILTER SIDEBAR + PRODUCT LIST */
+        .shop-layout {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            gap: 24px;
+            align-items: start;
+        }
+
+        /* FILTER SIDEBAR */
+        .filter-sidebar {
+            background: #fff;
+            border: 1px solid #e7e8eb;
+            border-radius: 16px;
+            padding: 22px;
+            box-shadow: 0 5px 18px rgba(25, 26, 29, .04);
+        }
+
+        .filter-group {
+            margin-bottom: 24px;
+        }
+
+        .filter-group:last-child {
+            margin-bottom: 0;
+        }
+
+        .filter-title {
+            font-size: 15px;
+            font-weight: 750;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .filter-search-input {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid #e7e8eb;
+            border-radius: 10px;
+            outline: none;
+            font-size: 14px;
+            transition: border-color .2s;
+        }
+
+        .filter-search-input:focus {
+            border-color: #3b4d9b;
+        }
+
+        .filter-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .filter-item label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 14px;
+            color: #333;
+            cursor: pointer;
+        }
+
+        .filter-item input[type="checkbox"] {
+            accent-color: #3b4d9b;
+            width: 16px;
+            height: 16px;
+            cursor: pointer;
+        }
+
+        .reset-filter-btn {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #e7e8eb;
+            border-radius: 10px;
+            background: #f7f7f8;
+            font-weight: 700;
+            font-size: 13px;
+            cursor: pointer;
+            transition: background .2s;
+        }
+
+        .reset-filter-btn:hover {
+            background: #ececee;
+        }
+
+        /* PRODUCT SECTION */
+        .product-top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            background: #fff;
+            padding: 14px 20px;
+            border: 1px solid #e7e8eb;
+            border-radius: 14px;
+        }
+
+        .product-count {
+            font-size: 14px;
+            color: #717680;
+        }
+
+        .sort-select {
+            padding: 8px 12px;
+            border: 1px solid #e7e8eb;
+            border-radius: 8px;
+            outline: none;
+            font-size: 14px;
+            background: #fff;
+            cursor: pointer;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 16px;
+        }
+
+        .product-card {
+            position: relative;
+            overflow: hidden;
+            border: 1px solid #e7e8eb;
+            border-radius: 18px;
+            background: #fff;
+            box-shadow: 0 6px 22px rgba(25, 26, 29, .045);
+            transition: transform .2s ease, box-shadow .2s ease;
+        }
+
+        .product-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 18px 35px rgba(25, 26, 29, .1);
+        }
+
+        .product-card a {
+            text-decoration: none;
+            color: inherit;
+            display: block;
+        }
+
+        .sale-tag {
+            position: absolute;
+            z-index: 2;
+            top: 12px;
+            left: 12px;
+            padding: 6px 9px;
+            border-radius: 8px;
+            background: #ef4444;
+            color: #fff;
+            font-size: 12px;
+            font-weight: 800;
+        }
+
+        .product-photo {
+            height: 220px;
+            padding: 18px;
+            background: #f7f7f8;
+        }
+
+        .product-photo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 12px;
+            display: block;
+            background: #fff;
+        }
+
+        .product-info {
+            padding: 16px 16px 18px;
+        }
+
+        .product-brand {
+            color: #858a94;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: .5px;
+            margin-bottom: 7px;
+        }
+
+        .product-name {
+            min-height: 44px;
+            font-size: 15px;
+            line-height: 1.4;
+            margin-bottom: 10px;
+            color: #111;
+        }
+
+        .product-price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .product-price {
+            font-size: 17px;
+            font-weight: 850;
+        }
+
+        .product-rating {
+            color: #f4a300;
+            font-size: 13px;
+            white-space: nowrap;
+        }
+
+        .no-result {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 40px;
+            color: #717680;
+            font-size: 15px;
+            background: #fff;
+            border-radius: 16px;
+            border: 1px solid #e7e8eb;
+        }
+
+      
+    </style>
+</head>
+<body>
+
+    <main class="category-wrap">
+        <div class="page-header">
+            <h1>Tất cả sản phẩm</h1>
+            <p>Khám phá bộ sưu tập gaming gear chính hãng chất lượng cao</p>
+        </div>
+
+        <div class="shop-layout">
+            <!-- THANH BỘ LỌC (FILTER SIDEBAR) -->
+            <aside class="filter-sidebar">
+                <!-- Tìm kiếm theo tên -->
+                <div class="filter-group">
+                    <div class="filter-title">Tìm kiếm</div>
+                    <input type="text" id="filterSearch" class="filter-search-input" placeholder="Nhập tên sản phẩm..." />
+                </div>
+
+                <!-- Lọc theo Hãng (Brand) -->
+                <div class="filter-group">
+                    <div class="filter-title">Thương hiệu</div>
+                    <ul class="filter-list">
+                        <li class="filter-item">
+                            <label><input type="checkbox" class="brand-filter" value="Razer"> Razer</label>
+                        </li>
+                        <li class="filter-item">
+                            <label><input type="checkbox" class="brand-filter" value="Pulsar"> Pulsar</label>
+                        </li>
+                        <li class="filter-item">
+                            <label><input type="checkbox" class="brand-filter" value="Realforce"> Realforce</label>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Lọc theo Khoảng giá -->
+                <div class="filter-group">
+                    <div class="filter-title">Mức giá</div>
+                    <ul class="filter-list">
+                        <li class="filter-item">
+                            <label><input type="checkbox" class="price-filter" value="under-1m"> Dưới 1 triệu</label>
+                        </li>
+                        <li class="filter-item">
+                            <label><input type="checkbox" class="price-filter" value="1m-5m"> 1 triệu - 5 triệu</label>
+                        </li>
+                        <li class="filter-item">
+                            <label><input type="checkbox" class="price-filter" value="over-5m"> Trên 5 triệu</label>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Nút reset bộ lọc -->
+                <div class="filter-group">
+                    <button type="button" id="resetFilter" class="reset-filter-btn">Xóa bộ lọc</button>
+                </div>
+            </aside>
+
+            <!-- DANH SÁCH SẢN PHẨM & SẮP XẾP -->
+            <section class="shop-content">
+                <div class="product-top-bar">
+                    <span class="product-count" id="productCount">Hiển thị sản phẩm</span>
+                    <select id="sortSelect" class="sort-select">
+                        <option value="default">Mặc định</option>
+                        <option value="price-asc">Giá: Thấp đến cao</option>
+                        <option value="price-desc">Giá: Cao đến thấp</option>
+                    </select>
+                </div>
+
+                <div class="product-grid" id="productGrid">
+                    <!-- Sản phẩm 1 -->
+                    <article class="product-card" data-name="Razer BlackWidow V4 Tenkeyless HyperSpeed Wuthering Waves Edition" data-brand="Razer" data-price="3576000">
+                        <a href="SP2">
+                            <div class="sale-tag">Giảm giá</div>
+                            <div class="product-photo">
+                                <img src="~/Content/image2/10.jpg" alt="Razer BlackWidow V4">
+                            </div>
+                            <div class="product-info">
+                                <div class="product-brand">Razer</div>
+                                <h3 class="product-name">Razer BlackWidow V4 Tenkeyless HyperSpeed Wuthering Waves Edition</h3>
+                                <div class="product-price-row">
+                                    <strong class="product-price">3.576.000đ</strong>
+                                    <span class="product-rating">★ 5.0</span>
+                                </div>
+                            </div>
+                        </a>
+                    </article>
+
+                    <!-- Sản phẩm 2 -->
+                    <article class="product-card" data-name="Razer Viper V3 Pro SE – Chuột đối xứng kèm dongle 1K" data-brand="Razer" data-price="3029000">
+                        <a href="SP3">
+                            <div class="product-photo">
+                                <img src="~/Content/image2/5.jpg" alt="Razer Viper V3 Pro SE">
+                            </div>
+                            <div class="product-info">
+                                <div class="product-brand">Razer</div>
+                                <h3 class="product-name">Razer Viper V3 Pro SE – Chuột đối xứng kèm dongle 1K</h3>
+                                <div class="product-price-row">
+                                    <strong class="product-price">3.029.000₫</strong>
+                                    <span class="product-rating">★ 5.0</span>
+                                </div>
+                            </div>
+                        </a>
+                    </article>
+
+                    <!-- Sản phẩm 3 -->
+                    <article class="product-card" data-name="Realforce × hololive GX1 Plus Keyboard Kanade Otonose Models" data-brand="Realforce" data-price="8329000">
+                        <a href="SP1">
+                            <div class="product-photo">
+                                <img src="~/Content/image2/thumb.jpg" alt="Realforce × hololive GX1 Plus">
+                            </div>
+                            <div class="product-info">
+                                <div class="product-brand">Realforce</div>
+                                <h3 class="product-name">Realforce × hololive GX1 Plus Keyboard Kanade Otonose Models</h3>
+                                <div class="product-price-row">
+                                    <strong class="product-price">8.329.000₫</strong>
+                                    <span class="product-rating">★ 5.0</span>
+                                </div>
+                            </div>
+                        </a>
+                    </article>
+
+                    <!-- Sản phẩm 4 -->
+                    <article class="product-card" data-name="Pulsar ParaControl V2 – Lót chuột control đa size đế cao su" data-brand="Pulsar" data-price="329000">
+                        <a href="SP4">
+                            <div class="product-photo">
+                                <img src="~/Content/image2/3.jpg" alt="Pulsar ParaControl V2">
+                            </div>
+                            <div class="product-info">
+                                <div class="product-brand">Pulsar</div>
+                                <h3 class="product-name">Pulsar ParaControl V2 – Lót chuột control đa size đế cao su</h3>
+                                <div class="product-price-row">
+                                    <strong class="product-price">329.000₫</strong>
+                                    <span class="product-rating">★ 5.0</span>
+                                </div>
+                            </div>
+                        </a>
+                    </article>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- SCRIPT XỬ LÝ LỌC VÀ SẮP XẾP SẢN PHẨM -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const searchInput = document.getElementById("filterSearch");
+            const brandCheckboxes = document.querySelectorAll(".brand-filter");
+            const priceCheckboxes = document.querySelectorAll(".price-filter");
+            const sortSelect = document.getElementById("sortSelect");
+            const resetButton = document.getElementById("resetFilter");
+            const productGrid = document.getElementById("productGrid");
+            const productCount = document.getElementById("productCount");
+
+            let cards = Array.from(productGrid.querySelectorAll(".product-card"));
+
+            function filterAndSortProducts() {
+                const keyword = searchInput.value.trim().toLowerCase();
+
+        
+                const selectedBrands = Array.from(brandCheckboxes)
+                    .filter(chk => chk.checked)
+                    .map(chk => chk.value.toLowerCase());
+
+          
+                const selectedPrices = Array.from(priceCheckboxes)
+                    .filter(chk => chk.checked)
+                    .map(chk => chk.value);
+
+                // 1. Lọc sản phẩm
+                let visibleCards = cards.filter(card => {
+                    const name = (card.dataset.name || "").toLowerCase();
+                    const brand = (card.dataset.brand || "").toLowerCase();
+                    const price = Number(card.dataset.price || 0);
+
+                    // Khớp từ khóa tìm kiếm
+                    const matchSearch = !keyword || name.includes(keyword);
+
+                    // Khớp hãng
+                    const matchBrand = selectedBrands.length === 0 || selectedBrands.includes(brand);
+
+                    // Khớp khoảng giá
+                    let matchPrice = true;
+                    if (selectedPrices.length > 0) {
+                        matchPrice = selectedPrices.some(range => {
+                            if (range === 'under-1m') return price < 1000000;
+                            if (range === '1m-5m') return price >= 1000000 && price <= 5000000;
+                            if (range === 'over-5m') return price > 5000000;
+                            return false;
+                        });
+                    }
+
+                    return matchSearch && matchBrand && matchPrice;
+                });
+
+                // 2. Sắp xếp sản phẩm
+                const sortValue = sortSelect.value;
+                if (sortValue === 'price-asc') {
+                    visibleCards.sort((a, b) => Number(a.dataset.price) - Number(b.dataset.price));
+                } else if (sortValue === 'price-desc') {
+                    visibleCards.sort((a, b) => Number(b.dataset.price) - Number(a.dataset.price));
+                }
+
+                // 3. Hiển thị lại giao diện
+                productGrid.innerHTML = "";
+                if (visibleCards.length > 0) {
+                    visibleCards.forEach(card => productGrid.appendChild(card));
+                    productCount.textContent = `Hiển thị ${visibleCards.length} sản phẩm`;
+                } else {
+                    productGrid.innerHTML = `<div class="no-result">Không tìm thấy sản phẩm phù hợp với bộ lọc của bạn.</div>`;
+                    productCount.textContent = `Hiển thị 0 sản phẩm`;
+                }
+            }
+
+            // Gắn sự kiện lắng nghe tương tác
+            searchInput.addEventListener("input", filterAndSortProducts);
+            brandCheckboxes.forEach(chk => chk.addEventListener("change", filterAndSortProducts));
+            priceCheckboxes.forEach(chk => chk.addEventListener("change", filterAndSortProducts));
+            sortSelect.addEventListener("change", filterAndSortProducts);
+
+            // Nút reset bộ lọc
+            resetButton.addEventListener("click", function () {
+                searchInput.value = "";
+                brandCheckboxes.forEach(chk => chk.checked = false);
+                priceCheckboxes.forEach(chk => chk.checked = false);
+                sortSelect.value = "default";
+                filterAndSortProducts();
+            });
+
+            // Chạy lần đầu cập nhật số lượng
+            filterAndSortProducts();
+        });
+    </script>
+</body>
+</html>

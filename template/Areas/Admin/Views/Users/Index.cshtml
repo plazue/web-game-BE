@@ -1,0 +1,212 @@
+﻿@model IEnumerable<template.Models.User>
+@{
+    ViewBag.Title = "Danh sách tài khoản";
+    Layout = "~/Areas/Admin/Views/Shared/_adminLayout.cshtml";
+}
+
+<style>
+    /* --- CSS QUẢN LÝ TÀI KHOẢN (INDEX) --- */
+    .admin-card {
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        padding: 28px;
+        border: 1px solid #e2e8f0;
+        margin-bottom: 30px;
+    }
+
+    .admin-title {
+        font-size: 22px;
+        font-weight: 700;
+        color: #1e293b;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 0;
+    }
+
+    .admin-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        margin-bottom: 0;
+    }
+
+        .admin-table thead tr {
+            background-color: #e2efda;
+        }
+
+        .admin-table th {
+            color: #2d3748;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 14px 16px;
+            border-bottom: 2px solid #cbd5e1;
+        }
+
+        .admin-table td {
+            padding: 12px 16px;
+            color: #1e293b;
+            font-size: 14px;
+            font-weight: 500;
+            border-bottom: 1px solid #e2e8f0;
+            background-color: #f8fafc;
+            vertical-align: middle;
+            transition: background-color 0.2s ease;
+        }
+
+        .admin-table tbody tr:hover td {
+            background-color: #f1f5f9;
+        }
+
+    .badge-role {
+        padding: 5px 10px;
+        font-size: 12px;
+        font-weight: 600;
+        border-radius: 4px;
+        display: inline-block;
+    }
+
+    .badge-admin {
+        background-color: #fee2e2;
+        color: #991b1b;
+        border: 1px solid #fecaca;
+    }
+
+    .badge-customer {
+        background-color: #e0f2fe;
+        color: #0369a1;
+        border: 1px solid #bae6fd;
+    }
+
+    .btn-custom {
+        display: inline-block;
+        font-weight: 600;
+        font-size: 13px;
+        text-decoration: none;
+        padding: 6px 14px;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+        text-align: center;
+    }
+
+    .btn-custom-detail {
+        background-color: #0ea5e9;
+        color: #ffffff !important;
+    }
+
+        .btn-custom-detail:hover {
+            background-color: #0284c7;
+            box-shadow: 0 4px 6px rgba(14, 165, 233, 0.25);
+        }
+
+    .btn-custom-update {
+        background-color: #2563eb;
+        color: #ffffff !important;
+    }
+
+        .btn-custom-update:hover {
+            background-color: #1d4ed8;
+            box-shadow: 0 4px 6px rgba(37, 99, 235, 0.25);
+        }
+
+    .btn-custom-delete {
+        background-color: #dc2626;
+        color: #ffffff !important;
+    }
+
+        .btn-custom-delete:hover {
+            background-color: #b91c1c;
+            box-shadow: 0 4px 6px rgba(220, 38, 38, 0.25);
+        }
+
+    .btn-custom-create {
+        background-color: #2563eb;
+        color: #ffffff !important;
+        padding: 8px 20px;
+        font-size: 14px;
+        display: inline-block;
+    }
+
+        .btn-custom-create:hover {
+            background-color: #1d4ed8;
+            color: #ffffff !important;
+        }
+</style>
+
+<div class="admin-card">
+    <!-- Tiêu đề lớn -->
+    <div class="mb-4 pb-2 border-bottom">
+        <h3 class="admin-title">QUẢN LÝ TÀI KHOẢN HỆ THỐNG</h3>
+    </div>
+
+    <!-- Bảng hiển thị danh sách -->
+    <div class="table-responsive mb-4">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Tên đăng nhập</th>
+                    <th>Email</th>
+                    <th>Mật khẩu</th>
+                    <th>Phân quyền (Role)</th>
+                    <th>Ngày tạo</th>
+                    <th class="text-end" style="width: 250px;"></th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="fw-semibold text-dark">
+                            @Html.DisplayFor(modelItem => item.Username)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Email)
+                        </td>
+                        <td>
+                            <span class="text-muted">••••••••</span>
+                        </td>
+                        <td>
+                            @if (item.Role == "Admin")
+                            {
+                                <span class="badge-role badge-admin">Admin</span>
+                            }
+                            else
+                            {
+                                <span class="badge-role badge-customer">Customer</span>
+                            }
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.CreatedAt)
+                        </td>
+                        <td class="text-end">
+                            <!-- Chỉ hiển thị nút Chi tiết nếu ViewBag.ShowDetails là true (>= 5 user) -->
+                            @if (ViewBag.ShowDetails == true)
+                            {
+                                <a href="@Url.Action("Details", new { id = item.UserID })" class="btn-custom btn-custom-detail me-1">
+                                    Chi tiết
+                                </a>
+                            }
+                            <a href="@Url.Action("Edit", new { id = item.UserID })" class="btn-custom btn-custom-update me-1">
+                                Cập nhật
+                            </a>
+                            <a href="@Url.Action("Delete", new { id = item.UserID })" class="btn-custom btn-custom-delete">
+                                Xóa
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Nút Thêm mới ở dưới cùng -->
+    <div>
+        <a href="@Url.Action("Create")" class="btn-custom btn-custom-create">
+            Thêm mới
+        </a>
+    </div>
+</div>

@@ -1,0 +1,220 @@
+﻿@model template.Models.ViewModels.ProductSearchVM
+@{
+    ViewBag.Title = "Danh sách sản phẩm";
+    Layout = "~/Areas/Admin/Views/Shared/_adminLayout.cshtml";
+}
+
+<style>
+    /* --- CSS QUẢN LÝ SẢN PHẨM --- */
+    .admin-card {
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        padding: 28px;
+        border: 1px solid #e2e8f0;
+        margin-bottom: 30px;
+    }
+
+    .admin-title {
+        font-size: 22px;
+        font-weight: 700;
+        color: #1e293b;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 0;
+    }
+
+    .admin-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        margin-bottom: 0;
+    }
+
+        .admin-table thead tr {
+            background-color: #e2efda;
+        }
+
+        .admin-table th {
+            color: #2d3748;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 14px 16px;
+            border-bottom: 2px solid #cbd5e1;
+        }
+
+        .admin-table td {
+            padding: 12px 16px;
+            color: #1e293b;
+            font-size: 14px;
+            font-weight: 500;
+            border-bottom: 1px solid #e2e8f0;
+            background-color: #f8fafc;
+            vertical-align: middle;
+            transition: background-color 0.2s ease;
+        }
+
+        .admin-table tbody tr:hover td {
+            background-color: #f1f5f9;
+        }
+
+    .admin-input-search {
+        padding: 8px 14px;
+        font-size: 14px;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        background-color: #f8fafc;
+        color: #1e293b;
+        width: 260px;
+        transition: all 0.2s ease;
+    }
+
+        .admin-input-search:focus {
+            outline: none;
+            border-color: #2563eb;
+            background-color: #ffffff;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+
+    .btn-custom {
+        display: inline-block;
+        font-weight: 600;
+        font-size: 13px;
+        text-decoration: none;
+        padding: 6px 14px;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+        text-align: center;
+    }
+
+    .btn-custom-details {
+        background-color: #0d9488;
+        color: #ffffff !important;
+        padding: 6px 12px;
+    }
+
+        .btn-custom-details:hover {
+            background-color: #0f766e;
+            box-shadow: 0 4px 6px rgba(13, 148, 136, 0.25);
+        }
+
+    .btn-custom-update {
+        background-color: #2563eb;
+        color: #ffffff !important;
+        padding: 6px 12px;
+    }
+
+        .btn-custom-update:hover {
+            background-color: #1d4ed8;
+            box-shadow: 0 4px 6px rgba(37, 99, 235, 0.25);
+        }
+
+    .btn-custom-delete {
+        background-color: #dc2626;
+        color: #ffffff !important;
+        padding: 6px 12px;
+    }
+
+        .btn-custom-delete:hover {
+            background-color: #b91c1c;
+            box-shadow: 0 4px 6px rgba(220, 38, 38, 0.25);
+        }
+
+    .btn-custom-create {
+        background-color: #2563eb;
+        color: #ffffff !important;
+        padding: 8px 20px;
+        font-size: 14px;
+        display: inline-block;
+    }
+
+        .btn-custom-create:hover {
+            background-color: #1d4ed8;
+            color: #ffffff !important;
+        }
+</style>
+
+<div class="admin-card">
+    <!-- Tiêu đề lớn & Form tìm kiếm -->
+    <div class="mb-4 pb-2 border-bottom d-flex justify-content-between align-items-center flex-wrap gap-3">
+        <h3 class="admin-title">DANH SÁCH SẢN PHẨM</h3>
+
+        @using (Html.BeginForm("Index", "Products", FormMethod.Get, new { @class = "d-flex align-items-center gap-2" }))
+        {
+            <input type="text" name="searchTerm" value="@Model.SearchTerm" class="admin-input-search" placeholder="Tìm kiếm theo tên, mô tả..." />
+            <button type="submit" class="btn-custom btn-custom-update" style="padding: 8px 16px;">
+                <i class="fa-solid fa-search me-1"></i> Tìm kiếm
+            </button>
+        }
+    </div>
+
+    <!-- Bảng hiển thị danh sách -->
+    <div class="table-responsive mb-4">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th style="width: 80px;" class="text-center">Hình ảnh</th>
+                    <th>Tên Sản Phẩm</th>
+                    <th>Chủng loại (Danh mục)</th>
+                    <th>Giá Bán</th>
+                    <th>Tồn Kho</th>
+                    <th class="text-end" style="width: 260px;">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Products)
+                {
+                    <tr>
+                        <td class="text-center">
+                            @if (!string.IsNullOrEmpty(item.ProductImage))
+                            {
+                                <img src="@item.ProductImage" alt="Product Image" style="width: 45px; height: 45px; object-fit: cover; border-radius: 6px; border: 1px solid #cbd5e1; box-shadow: 0 1px 3px rgba(0,0,0,0.1);" />
+                            }
+                            else
+                            {
+                                <div class="bg-light text-muted d-flex align-items-center justify-content-center mx-auto" style="width: 45px; height: 45px; border-radius: 6px; border: 1px solid #cbd5e1; font-size: 14px;">
+                                    <i class="fa-solid fa-image"></i>
+                                </div>
+                            }
+                        </td>
+                        <td class="fw-semibold text-dark">
+                            @Html.DisplayFor(modelItem => item.Title)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Category.CategoryName)
+                        </td>
+                        <td class="fw-bold text-primary">
+                            @string.Format("{0:N0} đ", item.Price)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.StockQuantity)
+                        </td>
+                        <td class="text-end">
+                            <a href="@Url.Action("Details", new { id = item.ProductID })" class="btn-custom btn-custom-details me-1">
+                                Chi tiết
+                            </a>
+                            <a href="@Url.Action("Edit", new { id = item.ProductID })" class="btn-custom btn-custom-update me-1">
+                                Cập nhật
+                            </a>
+                            <a href="@Url.Action("Delete", new { id = item.ProductID })" class="btn-custom btn-custom-delete">
+                                Xóa
+                            </a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Nút Thêm mới ở dưới cùng -->
+    <div>
+        <a href="@Url.Action("Create")" class="btn-custom btn-custom-create">
+            Thêm mới sản phẩm
+        </a>
+    </div>
+</div>
+

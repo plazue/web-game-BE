@@ -1,0 +1,74 @@
+﻿@model template.Models.Category
+@{
+    ViewBag.Title = "Thêm mới danh mục";
+    Layout = "~/Areas/Admin/Views/Shared/_adminLayout.cshtml";
+}
+
+<style>
+    /* CSS riêng cho trang Create / Edit */
+    .create-container {
+        padding: 20px;
+        background: #fff;
+    }
+
+    .page-title {
+        margin-bottom: 20px;
+        font-weight: bold;
+        color: #333;
+    }
+
+    .action-group {
+        margin-top: 15px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    /* Style cho các nút bấm đồng bộ */
+    .btn-custom-submit {
+        background-color: #337ab7;
+        color: #fff;
+        border: none;
+        padding: 8px 20px;
+        border-radius: 4px;
+        font-size: 14px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+        .btn-custom-submit:hover {
+            background-color: #286090;
+        }
+
+    .btn-custom-back {
+        background-color: #6c757d;
+        color: #fff;
+        padding: 8px 16px;
+        border-radius: 4px;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 14px;
+        transition: background-color 0.2s;
+    }
+
+        .btn-custom-back:hover {
+            background-color: #5a6268;
+            color: #fff;
+            text-decoration: none;
+        }
+</style>
+
+<div class="create-container">
+    <h2 class="page-title">THÊM MỚI DANH MỤC</h2>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.Partial("_CategoryForm", Model)
+
+        <div class="action-group">
+            <input type="submit" value="Lưu lại" class="btn-custom-submit" />
+            @Html.ActionLink("Quay lại danh sách", "Index", null, new { @class = "btn-custom-back" })
+        </div>
+    }
+</div>

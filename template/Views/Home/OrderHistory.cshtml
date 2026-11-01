@@ -1,0 +1,237 @@
+﻿@{
+    ViewBag.Title = "Lịch sử mua hàng";
+    Layout = "~/Views/Home/mau1.cshtml";
+}
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lịch sử mua hàng - Phong Cách Xanh</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f5f5f7;
+            color: #333;
+            padding: 40px 20px;
+        }
+
+        .history-container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .history-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+            .history-header h1 {
+                font-size: 24px;
+                font-weight: 700;
+                color: #111;
+            }
+
+        .order-card {
+            background: #fff;
+            border-radius: 12px;
+            padding: 20px 24px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            border: 1px solid #e5e5e7;
+        }
+
+        .order-card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #f0f0f0;
+            padding-bottom: 12px;
+            margin-bottom: 15px;
+        }
+
+        .order-code {
+            font-weight: 600;
+            font-size: 15px;
+            color: #2b78a2;
+        }
+
+        .order-date {
+            font-size: 13px;
+            color: #666;
+        }
+
+        .order-items-preview {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .preview-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .preview-img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 1px solid #eee;
+        }
+
+        .preview-info {
+            flex: 1;
+        }
+
+        .preview-name {
+            font-size: 14px;
+            font-weight: 600;
+            color: #222;
+        }
+
+        .preview-qty {
+            font-size: 12px;
+            color: #777;
+        }
+
+        .order-card-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-top: 1px solid #f0f0f0;
+            padding-top: 12px;
+        }
+
+        .order-total {
+            font-size: 15px;
+            font-weight: 700;
+            color: #111;
+        }
+
+        .btn-detail {
+            background-color: #2b78a2;
+            color: #fff;
+            padding: 8px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 13px;
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+            .btn-detail:hover {
+                background-color: #1f5777;
+            }
+
+        .empty-history {
+            text-align: center;
+            padding: 50px 20px;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+
+            .empty-history i {
+                font-size: 48px;
+                color: #ccc;
+                margin-bottom: 15px;
+            }
+    </style>
+</head>
+<body>
+
+    <div class="history-container">
+        <div class="history-header">
+            <h1>Lịch sử mua hàng của bạn</h1>
+            <a href="/Home/Index" class="btn-detail"><i class="fa-solid fa-arrow-left"></i> Tiếp tục mua sắm</a>
+        </div>
+
+        <div id="orderHistoryList">
+            <!-- Danh sách các đơn hàng sẽ được render ở đây -->
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // Lấy danh sách lịch sử đơn hàng từ localStorage (mảng các đơn hàng)
+            let orderHistory = JSON.parse(localStorage.getItem("orderHistory")) || [];
+            const container = document.getElementById("orderHistoryList");
+
+            if (orderHistory.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-history">
+                        <i class="fa-solid fa-box-open"></i>
+                        <p style="font-size: 16px; color: #666; margin-bottom: 15px;">Bạn chưa có đơn hàng nào.</p>
+                        <a href="/Home/Index" class="btn-detail">Mua sắm ngay</a>
+                    </div>
+                `;
+                return;
+            }
+
+            let html = "";
+            // Duyệt qua từng đơn hàng để hiển thị (đơn hàng mới nhất lên đầu)
+            orderHistory.slice().reverse().forEach(order => {
+                let dateStr = order.createdAt ? new Date(order.createdAt).toLocaleString("vi-VN") : "Vừa xong";
+                let itemsPreviewHTML = "";
+
+                if (order.items && order.items.length > 0) {
+                    order.items.forEach(item => {
+                        let priceNum = Number(item.price) || 0;
+                        let qty = Number(item.quantity) || 1;
+                        itemsPreviewHTML += `
+                            <div class="preview-item">
+                                <img src="${item.image || 'https://via.placeholder.com/50'}" class="preview-img" alt="${item.title}">
+                                <div class="preview-info">
+                                    <div class="preview-name">${item.title}</div>
+                                    <div class="preview-qty">Số lượng: ${qty} - Đơn giá: ${priceNum.toLocaleString('vi-VN')} ₫</div>
+                                </div>
+                            </div>
+                        `;
+                    });
+                }
+
+                html += `
+                    <div class="order-card">
+                        <div class="order-card-header">
+                            <span class="order-code">Đơn hàng #${order.orderId || Math.floor(100000 + Math.random() * 900000)}</span>
+                            <span class="order-date"><i class="fa-regular fa-clock"></i> ${dateStr}</span>
+                        </div>
+                        <div class="order-items-preview">
+                            ${itemsPreviewHTML}
+                        </div>
+                        <div class="order-card-footer">
+                            <div class="order-total">Tổng tiền: ${(order.subtotal || 0).toLocaleString('vi-VN')} ₫</div>
+                            <a href="/Home/OrderDetail" class="btn-detail" onclick="viewOrderDetail('${order.orderId}')">Xem chi tiết</a>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+        });
+
+        // Hàm hỗ trợ khi bấm vào xem chi tiết đơn hàng cụ thể
+        function viewOrderDetail(orderId) {
+            // Có thể lưu đơn hàng đang chọn vào lastOrder để trang OrderDetail hiển thị chính xác đơn đó
+            let orderHistory = JSON.parse(localStorage.getItem("orderHistory")) || [];
+            let targetOrder = orderHistory.find(o => o.orderId == orderId) || orderHistory[orderHistory.length - 1];
+            if (targetOrder) {
+                localStorage.setItem("lastOrder", JSON.stringify(targetOrder));
+            }
+        }
+    </script>
+
+</body>
+</html>

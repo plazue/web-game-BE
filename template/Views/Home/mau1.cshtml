@@ -1,0 +1,318 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://kit.fontawesome.com/2ba83b9efc.js" crossorigin="anonymous"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 40px;
+            background-color: #ffffff;
+            border-bottom: 1px solid #e5e5e5;
+            width: 100%;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .logo-text {
+            font-size: 22px;
+            font-weight: 300;
+            color: #222;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links ul {
+            display: flex;
+            list-style: none;
+            gap: 24px;
+        }
+
+        .nav-item {
+            text-decoration: none;
+            color: #111827;
+            font-weight: 600;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: color 0.2s ease;
+            white-space: nowrap;
+        }
+
+            .nav-item:hover {
+                color: #0056b3;
+            }
+
+        .right-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            white-space: nowrap;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background-color: #f3f4f6;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 8px 14px;
+            width: 260px;
+        }
+
+        .search-icon {
+            color: #6b7280;
+            font-size: 14px;
+            margin-right: 8px;
+        }
+
+        .search-box input {
+            border: none;
+            background: transparent;
+            outline: none;
+            width: 100%;
+            font-size: 14px;
+            color: #374151;
+        }
+
+        .user-icons {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .icon-btn {
+            color: #111827;
+            font-size: 18px;
+            text-decoration: none;
+            transition: color 0.2s ease;
+        }
+
+            .icon-btn:hover {
+                color: #0056b3;
+            }
+
+        /* --- STYLES CHO FOOTER --- */
+        .site-footer {
+            background-color: #0b132b;
+            color: #ffffff;
+            padding: 50px 60px 30px 60px;
+            margin-top: 50px;
+        }
+
+        .footer-top {
+            max-width: 600px;
+            margin-bottom: 40px;
+        }
+
+            .footer-top h3 {
+                font-size: 24px;
+                font-weight: 700;
+                margin-bottom: 8px;
+            }
+
+            .footer-top p {
+                font-size: 14px;
+                color: #b0b3c6;
+                margin-bottom: 20px;
+            }
+
+        .newsletter-form {
+            display: flex;
+            align-items: center;
+            background-color: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            padding: 6px 6px 6px 16px;
+            max-width: 500px;
+        }
+
+            .newsletter-form input {
+                flex: 1;
+                background: transparent;
+                border: none;
+                outline: none;
+                color: #fff;
+                font-size: 14px;
+            }
+
+                .newsletter-form input::placeholder {
+                    color: #8c90a2;
+                }
+
+        .newsletter-btn {
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            width: 38px;
+            height: 38px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+
+            .newsletter-btn:hover {
+                background-color: #1d4ed8;
+            }
+
+        .footer-accordion {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .accordion-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 18px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            color: #f1f5f9;
+        }
+
+            .accordion-item i {
+                font-size: 12px;
+                color: #b0b3c6;
+            }
+
+        .footer-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-top: 40px;
+        }
+
+        .social-icons {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+            .social-icons a {
+                color: #fff;
+                font-size: 20px;
+                text-decoration: none;
+                transition: color 0.2s;
+            }
+
+                .social-icons a:hover {
+                    color: #2563eb;
+                }
+
+        .copyright {
+            font-size: 13px;
+            color: #94a3b8;
+        }
+
+        .gov-badge img {
+            height: 45px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <div class="logo">
+            <svg class="logo-icon" viewBox="0 0 100 100" width="35" height="35">
+                <circle cx="50" cy="50" r="45" fill="none" stroke="#111" stroke-width="4" />
+                <path d="M 30,50 Q 50,20 70,50 T 30,50" fill="none" stroke="#111" stroke-width="4" />
+            </svg>
+            <span class="logo-text">Phong Cách Xanh</span>
+        </div>
+
+        <nav class="nav-links">
+            <ul>
+                <li><a href="mainmenu" class="nav-item">trang chính</a></li>
+                <li><a href="OrderDetail" class="nav-item">thông tin đơn hàng</a></li>
+                <li><a href="OrderHistory" class="nav-item">lịch sử đơn hàng</a></li>
+                <li><a href="categories" class="nav-item">Sản phẩm</a></li>
+
+             
+            </ul>
+        </nav>
+
+        <div class="right-section">
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" placeholder="Tìm chuột, bàn phím...">
+            </div>
+            <div class="user-icons">
+                <a href="Login" class="icon-btn"><i class="fa-regular fa-circle-user"></i></a>
+                <a href="giohang" class="icon-btn"><i class="fa-solid fa-basket-shopping"></i></a>
+            </div>
+        </div>
+    </div>
+
+    @RenderBody()
+
+    <!-- PHẦN FOOTER ĐÃ TẠO -->
+    <footer class="site-footer">
+        <div class="footer-top">
+            <h3>Nhận tin khuyến mãi</h3>
+            <p>Nhận voucher giảm 5% ngay sau khi đăng ký.</p>
+            <div class="newsletter-form">
+                <input type="email" placeholder="Email">
+                <button type="button" class="newsletter-btn">
+                    <i class="fa-solid fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <div class="footer-accordion">
+            <div class="accordion-item">
+                <span>CÔNG TY TNHH PHONG CÁCH XANH</span>
+                <i class="fa-solid fa-chevron-down"></i>
+            </div>
+            <div class="accordion-item">
+                <span>LIÊN HỆ & HỖ TRỢ</span>
+                <i class="fa-solid fa-chevron-down"></i>
+            </div>
+            <div class="accordion-item">
+                <span>CHÍNH SÁCH & HỖ TRỢ</span>
+                <i class="fa-solid fa-chevron-down"></i>
+            </div>
+            <div class="accordion-item">
+                <span>ƯU ĐÃI & CHƯƠNG TRÌNH</span>
+                <i class="fa-solid fa-chevron-down"></i>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <div>
+                <div class="social-icons">
+                    <a href="#"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="#"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="#"><i class="fa-brands fa-youtube"></i></a>
+                    <a href="#"><i class="fa-brands fa-tiktok"></i></a>
+                </div>
+                <div class="copyright">
+                    © 2026, Phong Cách Xanh.
+                </div>
+            </div>
+            <div class="gov-badge">
+                <!-- Dùng ảnh huy hiệu Bộ Công Thương nếu có hoặc bỏ khung mẫu -->
+                <img src="https://congthuong.gov.vn/assets/images/logo.png" alt="Đã thông báo Bộ Công Thương" style="opacity: 0.8; height: 40px; background: #fff; padding: 4px; border-radius: 4px;">
+            </div>
+        </div>
+    </footer>
+
+</body>
+</html>

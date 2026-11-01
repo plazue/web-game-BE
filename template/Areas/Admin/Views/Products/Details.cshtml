@@ -1,0 +1,27 @@
+﻿@model template.Models.Product
+@{
+    ViewBag.Title = Model != null ? Model.Title : "Chi tiết sản phẩm";
+    Layout = "~/Areas/Admin/Views/Shared/_adminLayout.cshtml";
+}
+
+<style>
+    .customer-detail-container {
+        width: min(1180px, 92%);
+        margin: 40px auto;
+    }
+</style>
+
+<div class="customer-detail-container">
+    @if (Model != null)
+    {
+        Html.RenderPartial("_ProductDetailContent", Model);
+    }
+    else
+    {
+        <div class="alert alert-warning text-center py-5">
+            <h3>Không tìm thấy thông tin sản phẩm!</h3>
+            <p>Sản phẩm bạn đang tìm kiếm có thể đã bị xóa hoặc không tồn tại.</p>
+            <a href="@Url.Action("Index", "Home")" class="btn btn-primary mt-3">Quay về trang chủ</a>
+        </div>
+    }
+</div>

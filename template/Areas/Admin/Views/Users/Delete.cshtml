@@ -1,0 +1,165 @@
+﻿@model template.Models.User
+@{
+    ViewBag.Title = "Xóa tài khoản";
+    Layout = "~/Areas/Admin/Views/Shared/_adminLayout.cshtml";
+}
+
+<style>
+    /* --- CSS QUẢN LÝ TÀI KHOẢN (DELETE) --- */
+    .admin-form-card {
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        padding: 28px;
+        border: 1px solid #e2e8f0;
+        margin-bottom: 30px;
+    }
+
+    .admin-form-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 16px;
+        margin-bottom: 24px;
+        border-bottom: 2px solid #fee2e2;
+    }
+
+    .admin-form-title {
+        font-size: 22px;
+        font-weight: 700;
+        color: #991b1b;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin: 0;
+    }
+
+    .admin-label {
+        font-weight: 600;
+        color: #334155;
+        font-size: 14px;
+    }
+
+    .admin-alert-danger {
+        background-color: #fef2f2;
+        border: 1px solid #fecaca;
+        color: #991b1b;
+        padding: 12px 16px;
+        border-radius: 6px;
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+
+    .badge-role {
+        padding: 4px 10px;
+        font-size: 12px;
+        font-weight: 600;
+        border-radius: 4px;
+        display: inline-block;
+    }
+
+    .badge-admin {
+        background-color: #fee2e2;
+        color: #991b1b;
+        border: 1px solid #fecaca;
+    }
+
+    .badge-customer {
+        background-color: #e0f2fe;
+        color: #0369a1;
+        border: 1px solid #bae6fd;
+    }
+
+    .btn-admin-delete {
+        background-color: #dc2626;
+        color: #ffffff !important;
+        font-weight: 600;
+        font-size: 14px;
+        padding: 9px 24px;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .btn-admin-delete:hover {
+            background-color: #b91c1c;
+            box-shadow: 0 4px 6px rgba(220, 38, 38, 0.25);
+        }
+
+    .btn-admin-back {
+        background-color: #f1f5f9;
+        color: #475569 !important;
+        font-weight: 600;
+        font-size: 13px;
+        padding: 7px 16px;
+        border-radius: 6px;
+        border: 1px solid #cbd5e1;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+        .btn-admin-back:hover {
+            background-color: #e2e8f0;
+            color: #1e293b !important;
+        }
+</style>
+
+<div class="admin-form-card">
+    <div class="admin-form-header">
+        <h3 class="admin-form-title">
+            <i class="fa-solid fa-user-xmark me-2"></i> XÁC NHẬN XÓA TÀI KHOẢN
+        </h3>
+        @Html.ActionLink("Quay lại danh sách", "Index", null, new { @class = "btn-admin-back" })
+    </div>
+
+    <div class="admin-alert-danger">
+        <i class="fa-solid fa-circle-exclamation me-2"></i> Bạn có chắc chắn muốn xóa tài khoản này không? Thao tác này không thể hoàn tác.
+    </div>
+
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <dl class="row mb-0">
+                <dt class="col-sm-2 admin-label py-2">Tên đăng nhập:</dt>
+                <dd class="col-sm-10 fw-bold text-dark py-2">@Html.DisplayFor(model => model.Username)</dd>
+
+                <dt class="col-sm-2 admin-label py-2">Email:</dt>
+                <dd class="col-sm-10 py-2">@Html.DisplayFor(model => model.Email)</dd>
+
+                <dt class="col-sm-2 admin-label py-2">Mật khẩu:</dt>
+                <dd class="col-sm-10 text-muted py-2">••••••••</dd>
+
+                <dt class="col-sm-2 admin-label py-2">Quyền hạn (Role):</dt>
+                <dd class="col-sm-10 py-2">
+                    @if (Model.Role == "Admin")
+                    {
+                        <span class="badge-role badge-admin">Admin</span>
+                    }
+                    else
+                    {
+                        <span class="badge-role badge-customer">Customer</span>
+                    }
+                </dd>
+
+                <dt class="col-sm-2 admin-label py-2">Ngày tạo:</dt>
+                <dd class="col-sm-10 py-2">@Html.DisplayFor(model => model.CreatedAt)</dd>
+            </dl>
+        </div>
+    </div>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="d-flex gap-2 border-top pt-3 align-items-center">
+            <button type="submit" class="btn-admin-delete">
+                <i class="fa-solid fa-trash"></i> Xác nhận xóa
+            </button>
+            @Html.ActionLink("Hủy", "Index", null, new { @class = "btn-admin-back" })
+        </div>
+    }
+</div>
+

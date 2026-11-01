@@ -1,0 +1,52 @@
+﻿@model IEnumerable<template.Models.Product>
+
+<table class="admin-table">
+    <thead>
+        <tr>
+            <th style="width: 70px;" class="text-center">Hình ảnh</th>
+            <th>Tên sản phẩm</th>
+            <th>Danh mục</th>
+            <th class="text-end">Giá bán</th>
+            <th class="text-center">Tồn kho</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model != null && Model.Any())
+        {
+            foreach (var item in Model)
+            {
+                <tr>
+                    <td class="text-center">
+                        @if (!string.IsNullOrEmpty(item.ProductImage))
+                        {
+                            <img src="@Url.Content(item.ProductImage)" alt="" style="width: 40px; height: 40px; object-fit: cover; border-radius: 6px;" />
+                        }
+                        else
+                        {
+                            <span class="text-muted">No img</span>
+                        }
+                    </td>
+                    <td class="fw-semibold">@item.Title</td>
+                    <td>@(item.Category != null ? item.Category.CategoryName : "N/A")</td>
+                    <td class="text-end fw-bold text-primary">@string.Format("{0:N0} đ", item.Price)</td>
+                    <td class="text-center">
+                        @if (item.StockQuantity > 0)
+                        {
+                            <span class="badge-ton">@item.StockQuantity</span>
+                        }
+                        else
+                        {
+                            <span class="badge-het">0 (Cần nhập)</span>
+                        }
+                    </td>
+                </tr>
+            }
+        }
+        else
+        {
+            <tr>
+                <td colspan="5" class="text-center text-muted py-3">Không có sản phẩm nào trong danh mục này.</td>
+            </tr>
+        }
+    </tbody>
+</table>

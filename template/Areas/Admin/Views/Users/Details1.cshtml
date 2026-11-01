@@ -1,0 +1,182 @@
+﻿@model template.Models.User
+@{
+    ViewBag.Title = "Chi tiết khách hàng";
+    Layout = "~/Areas/Admin/Views/Shared/_adminLayout.cshtml";
+}
+
+<style>
+    /* --- CSS TRANG CHI TIẾT KHÁCH HÀNG --- */
+    .admin-card {
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        padding: 28px;
+        border: 1px solid #e2e8f0;
+        margin-bottom: 30px;
+    }
+
+    .admin-title {
+        font-size: 22px;
+        font-weight: 700;
+        color: #1e293b;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 0;
+    }
+
+    .admin-label {
+        font-weight: 600;
+        color: #334155;
+        font-size: 14px;
+    }
+
+    .admin-table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0;
+        margin-top: 15px;
+    }
+
+        .admin-table thead tr {
+            background-color: #e2efda;
+        }
+
+        .admin-table th {
+            color: #2d3748;
+            font-size: 13px;
+            font-weight: 700;
+            text-transform: uppercase;
+            padding: 12px 16px;
+            border-bottom: 2px solid #cbd5e1;
+        }
+
+        .admin-table td {
+            padding: 12px 16px;
+            color: #1e293b;
+            font-size: 14px;
+            font-weight: 500;
+            border-bottom: 1px solid #e2e8f0;
+            background-color: #f8fafc;
+            vertical-align: middle;
+        }
+
+    .section-subtitle {
+        font-size: 16px;
+        font-weight: 700;
+        color: #1e293b;
+        margin-top: 30px;
+        margin-bottom: 15px;
+        text-transform: uppercase;
+        border-left: 4px solid #2563eb;
+        padding-left: 10px;
+    }
+
+    .btn-custom {
+        display: inline-block;
+        font-weight: 600;
+        font-size: 13px;
+        text-decoration: none;
+        padding: 6px 14px;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.06);
+    }
+
+    .btn-custom-edit {
+        background-color: #2563eb;
+        color: #ffffff !important;
+    }
+
+        .btn-custom-edit:hover {
+            background-color: #1d4ed8;
+        }
+
+    .btn-custom-back {
+        background-color: #f1f5f9;
+        color: #475569 !important;
+        border: 1px solid #cbd5e1;
+    }
+
+        .btn-custom-back:hover {
+            background-color: #e2e8f0;
+            color: #1e293b !important;
+        }
+</style>
+
+<div class="admin-card">
+    <!-- Tiêu đề lớn -->
+    <div class="mb-4 pb-2 border-bottom d-flex justify-content-between align-items-center">
+        <h3 class="admin-title">CHI TIẾT KHÁCH HÀNG: @Model.Username</h3>
+        <div class="d-flex gap-2">
+            <a href="@Url.Action("Index1")" class="btn-custom btn-custom-back">
+                <i class="fa-solid fa-arrow-left me-1"></i> Quay lại danh sách khách hàng
+            </a>
+        </div>
+    </div>
+
+    <!-- Thông tin chi tiết khách hàng -->
+    <div class="row mb-4">
+        <div class="col-md-12">
+            <dl class="row mb-0">
+                <dt class="col-sm-2 admin-label py-2">Tên đăng nhập:</dt>
+                <dd class="col-sm-10 fw-bold text-dark py-2">@Html.DisplayFor(model => model.Username)</dd>
+
+                <dt class="col-sm-2 admin-label py-2">Email:</dt>
+                <dd class="col-sm-10 py-2">@Html.DisplayFor(model => model.Email)</dd>
+
+                <dt class="col-sm-2 admin-label py-2">Phân quyền:</dt>
+                <dd class="col-sm-10 py-2">@Html.DisplayFor(model => model.Role)</dd>
+
+                <dt class="col-sm-2 admin-label py-2">Ngày tạo:</dt>
+                <dd class="col-sm-10 py-2">@Html.DisplayFor(model => model.CreatedAt)</dd>
+            </dl>
+        </div>
+    </div>
+
+    <!-- Danh sách đơn hàng liên quan của khách hàng -->
+    <div class="section-subtitle">Danh sách đơn hàng liên quan của khách hàng</div>
+
+    <div class="table-responsive">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Mã đơn hàng</th>
+                    <th>Ngày đặt</th>
+                    <th>Tổng tiền</th>
+                    <th>Trạng thái</th>
+                    <th class="text-end">Thao tác</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Orders != null && Model.Orders.Any())
+                {
+                    foreach (var order in Model.Orders)
+                    {
+                        <tr>
+                            <td class="fw-semibold">#@order.OrderID</td>
+                            <!-- Đã sửa OrderDate thành CreatedAt cho khớp với model Order -->
+                            <td>@(order.CreatedAt.HasValue ? order.CreatedAt.Value.ToString("dd/MM/yyyy") : "N/A")</td>
+                            <td class="text-danger fw-bold">@string.Format("{0:N0} đ", order.Subtotal)</td>
+                            <td>
+                                <span class="badge bg-info text-dark">@order.OrderStatus</span>
+                            </td>
+                            <td class="text-end">
+                                <a href="@Url.Action("Details", "Orders", new { id = order.OrderID })" class="btn-custom btn-custom-edit">
+                                    Xem đơn
+                                </a>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="5" class="text-center text-muted py-3">Khách hàng này chưa có đơn hàng nào trong hệ thống.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>

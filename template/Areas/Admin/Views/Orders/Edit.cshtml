@@ -1,0 +1,181 @@
+﻿@model template.Models.Order
+@{
+    ViewBag.Title = "Chỉnh sửa đơn hàng";
+    Layout = "~/Areas/Admin/Views/Shared/_adminLayout.cshtml";
+}
+
+<style>
+    /* --- CSS QUẢN LÝ ĐƠN HÀNG (FORM EDIT) --- */
+    .admin-form-card {
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        padding: 28px;
+        border: 1px solid #e2e8f0;
+        margin-bottom: 30px;
+    }
+
+    .admin-form-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-bottom: 16px;
+        margin-bottom: 24px;
+        border-bottom: 2px solid #e2efda;
+    }
+
+    .admin-form-title {
+        font-size: 22px;
+        font-weight: 700;
+        color: #1e293b;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin: 0;
+    }
+
+    .admin-label {
+        font-weight: 600;
+        color: #334155;
+        font-size: 14px;
+    }
+
+    .admin-input {
+        width: 100%;
+        padding: 10px 14px;
+        font-size: 14px;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        background-color: #f8fafc;
+        color: #1e293b;
+        transition: all 0.2s ease;
+    }
+
+        .admin-input:focus {
+            outline: none;
+            border-color: #2563eb;
+            background-color: #ffffff;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.15);
+        }
+
+    .admin-alert-danger {
+        background-color: #fef2f2;
+        border: 1px solid #fecaca;
+        color: #991b1b;
+        padding: 12px 16px;
+        border-radius: 6px;
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+
+    .btn-admin-submit {
+        background-color: #d97706; /* Màu vàng cam cho nút Lưu/Chỉnh sửa */
+        color: #ffffff !important;
+        font-weight: 600;
+        font-size: 14px;
+        padding: 9px 24px;
+        border-radius: 6px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+        .btn-admin-submit:hover {
+            background-color: #b45309;
+            box-shadow: 0 4px 6px rgba(217, 119, 6, 0.25);
+        }
+
+    .btn-admin-back {
+        background-color: #f1f5f9;
+        color: #475569 !important;
+        font-weight: 600;
+        font-size: 13px;
+        padding: 7px 16px;
+        border-radius: 6px;
+        border: 1px solid #cbd5e1;
+        text-decoration: none;
+        transition: all 0.2s ease;
+    }
+
+        .btn-admin-back:hover {
+            background-color: #e2e8f0;
+            color: #1e293b !important;
+        }
+</style>
+
+<div class="admin-form-card">
+    <div class="admin-form-header">
+        <h3 class="admin-form-title">
+            <i class="fa-solid fa-pen-to-square text-warning me-2"></i> CẬP NHẬT ĐƠN HÀNG #@Model.OrderID
+        </h3>
+        @Html.ActionLink("Quay lại danh sách", "Index", null, new { @class = "btn-admin-back" })
+    </div>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        if (!ViewData.ModelState.IsValid)
+        {
+            <div class="admin-alert-danger">
+                @Html.ValidationSummary(true, "")
+            </div>
+        }
+
+        @Html.HiddenFor(model => model.OrderID)
+        @Html.HiddenFor(model => model.CreatedAt) <!-- Giữ nguyên ngày tạo ban đầu -->
+
+        <div class="row admin-form-group align-items-center mb-3">
+            @Html.LabelFor(model => model.UserID, "Khách hàng", htmlAttributes: new { @class = "col-md-2 admin-label" })
+            <div class="col-md-10">
+                @Html.DropDownList("UserID", null, htmlAttributes: new { @class = "admin-input" })
+                @Html.ValidationMessageFor(model => model.UserID, "", new { @class = "text-danger small mt-1 d-block" })
+            </div>
+        </div>
+
+        <div class="row admin-form-group align-items-center mb-3">
+            @Html.LabelFor(model => model.Subtotal, "Tổng tiền (VNĐ)", htmlAttributes: new { @class = "col-md-2 admin-label" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.Subtotal, new { htmlAttributes = new { @class = "admin-input" } })
+                @Html.ValidationMessageFor(model => model.Subtotal, "", new { @class = "text-danger small mt-1 d-block" })
+            </div>
+        </div>
+
+        <div class="row admin-form-group align-items-center mb-3">
+            @Html.LabelFor(model => model.OrderNote, "Ghi chú đơn hàng", htmlAttributes: new { @class = "col-md-2 admin-label" })
+            <div class="col-md-10">
+                @Html.TextAreaFor(model => model.OrderNote, 3, 40, new { @class = "admin-input" })
+                @Html.ValidationMessageFor(model => model.OrderNote, "", new { @class = "text-danger small mt-1 d-block" })
+            </div>
+        </div>
+
+        <div class="row admin-form-group align-items-center mb-3">
+            @Html.LabelFor(model => model.OrderStatus, "Trạng thái đơn hàng", htmlAttributes: new { @class = "col-md-2 admin-label" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.OrderStatus, new SelectList(new[]
+                {
+                    new { Text = "Chờ xử lý (Pending)", Value = "Pending" },
+                    new { Text = "Đang giao (Processing)", Value = "Processing" },
+                    new { Text = "Hoàn thành (Completed)", Value = "Completed" },
+                    new { Text = "Đã hủy (Cancelled)", Value = "Cancelled" }
+                }, "Value", "Text", Model.OrderStatus), new { @class = "admin-input" })
+                @Html.ValidationMessageFor(model => model.OrderStatus, "", new { @class = "text-danger small mt-1 d-block" })
+            </div>
+        </div>
+
+        <div class="row mt-4">
+            <div class="col-md-10 offset-md-2">
+                <button type="submit" class="btn-admin-submit">
+                    <i class="fa-solid fa-floppy-disk"></i> Lưu thay đổi
+                </button>
+            </div>
+        </div>
+    }
+</div>
+
+<FollowUp>
+    Bạn có muốn mình làm nốt phần giao diện cho trang **Details (Chi tiết đơn hàng)** để hiển thị danh sách các sản phẩm trong đơn (`OrderDetails`) không?
+</FollowUp>

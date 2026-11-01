@@ -1,0 +1,288 @@
+﻿@model IEnumerable<template.Models.ViewModels.CartItemViewModel>
+@{
+    ViewBag.Title = "Giỏ hàng của bạn";
+    Layout = "~/Areas/Customer/Views/Shared/_CustomerLayout.cshtml";
+    decimal grandTotal = Model != null ? Model.Sum(x => x.Total) : 0;
+}
+
+<div class="cart-wrap">
+    <div class="page-header">
+        <h1>Giỏ hàng của bạn</h1>
+        <p>Kiểm tra lại sản phẩm trước khi tiến hành thanh toán</p>
+    </div>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="cart-layout">
+            <!-- Danh sách sản phẩm trong giỏ -->
+            <div class="cart-items-container">
+                @foreach (var item in Model)
+                {
+                    <div class="cart-item-row">
+                        <img src="@Url.Content(!string.IsNullOrEmpty(item.Image) ? item.Image : "~/Content/image2/thumb.jpg")" alt="@item.Title" class="cart-item-img">
+                        <div class="cart-item-info">
+                            <a href="@Url.Action("ProductDetail", "Home2", new { id = item.ProductID })" class="cart-item-name">@item.Title</a>
+                            <div class="cart-item-price">@string.Format("{0:N0} đ", item.Price)</div>
+                        </div>
+                        <div class="cart-item-actions">
+                            <!-- Form cập nhật số lượng trực tiếp về Backend -->
+                            @using (Html.BeginForm("UpdateQuantity", "Cart", FormMethod.Post, new { @class = "d-flex align-items-center" }))
+                            {
+                                <input type="hidden" name="productId" value="@item.ProductID" />
+                                <div class="qty-control">
+                                    <input type="number" name="quantity" class="qty-input" value="@item.Quantity" min="1" onchange="this.form.submit()" />
+                                </div>
+                            }
+                            <a href="@Url.Action("RemoveItem", "Cart", new { productId = item.ProductID })" class="remove-btn" title="Xóa"><i class="fa-solid fa-trash-can"></i></a>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <!-- Hóa đơn / Tổng tiền -->
+            <div class="cart-summary">
+                <h3>Cộng giỏ hàng</h3>
+                <div class="summary-row">
+                    <span>Tạm tính</span>
+                    <strong>@string.Format("{0:N0} đ", grandTotal)</strong>
+                </div>
+                <div class="summary-row total">
+                    <span>Tổng cộng</span>
+                    <strong>@string.Format("{0:N0} đ", grandTotal)</strong>
+                </div>
+
+                <!-- KIỂM TRA ĐĂNG NHẬP TRƯỚC KHI CHO PHÉP THANH TOÁN -->
+                @if (Session["UserID"] != null)
+                {
+                    <a href="@Url.Action("Checkout", "Order")" class="checkout-btn">Tiến hành thanh toán</a>
+                }
+                else
+                {
+                    <a href="@Url.Action("Login", "Account", new { returnUrl = Url.Action("Index", "Cart") })" class="checkout-btn" style="background-color: #0f172a;" title="Vui lòng đăng nhập để thanh toán">Đăng nhập để thanh toán</a>
+                }
+
+                <a href="@Url.Action("ProductList", "Home2")" class="continue-shopping">← Tiếp tục mua sắm</a>
+            </div>
+        </div>
+    }
+    else
+    {
+        <div class="cart-empty">
+            <div class="empty-icon"><i class="fa-solid fa-basket-shopping"></i></div>
+            <h2>Giỏ hàng của bạn đang trống</h2>
+            <p>Không có sản phẩm nào trong giỏ hàng của bạn.</p>
+            <a href="@Url.Action("ProductList", "Home2")" class="hero-btn" style="background: #2563eb; color: #fff; margin-top: 20px; display:inline-block; padding: 12px 24px; border-radius:8px; text-decoration:none;">Mua sắm ngay</a>
+        </div>
+    }
+</div>
+
+<style>
+    .cart-wrap {
+        width: min(1180px, 92%);
+        margin: 0 auto;
+        padding: 40px 0 60px;
+    }
+
+    .page-header {
+        margin-bottom: 30px;
+    }
+
+        .page-header h1 {
+            font-size: clamp(28px, 3vw, 36px);
+            margin-bottom: 8px;
+        }
+
+        .page-header p {
+            color: #717680;
+            font-size: 14px;
+        }
+
+    .cart-layout {
+        display: grid;
+        grid-template-columns: 1fr 360px;
+        gap: 30px;
+        align-items: start;
+    }
+
+    .cart-items-container {
+        background: #fff;
+        border: 1px solid #e7e8eb;
+        border-radius: 16px;
+        padding: 20px;
+        box-shadow: 0 5px 18px rgba(25, 26, 29, .04);
+    }
+
+    .cart-item-row {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 16px 0;
+        border-bottom: 1px solid #eee;
+    }
+
+        .cart-item-row:last-child {
+            border-bottom: none;
+        }
+
+    .cart-item-img {
+        width: 80px;
+        height: 80px;
+        object-fit: contain;
+        border-radius: 10px;
+        background: #f7f7f8;
+        padding: 6px;
+        border: 1px solid #e7e8eb;
+    }
+
+    .cart-item-info {
+        flex: 1;
+    }
+
+    .cart-item-name {
+        font-size: 15px;
+        font-weight: 700;
+        color: #111;
+        margin-bottom: 6px;
+        text-decoration: none;
+        display: block;
+    }
+
+        .cart-item-name:hover {
+            color: #2563eb;
+        }
+
+    .cart-item-price {
+        font-size: 15px;
+        font-weight: 800;
+        color: #dc2626;
+    }
+
+    .cart-item-actions {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+    }
+
+    .qty-control {
+        display: flex;
+        align-items: center;
+        border: 1px solid #e7e8eb;
+        border-radius: 8px;
+        overflow: hidden;
+    }
+
+    .qty-input {
+        width: 50px;
+        text-align: center;
+        border: none;
+        outline: none;
+        font-size: 14px;
+        padding: 6px;
+    }
+
+    .remove-btn {
+        background: none;
+        border: none;
+        color: #94a3b8;
+        font-size: 16px;
+        cursor: pointer;
+        text-decoration: none;
+        transition: color 0.2s;
+    }
+
+        .remove-btn:hover {
+            color: #ef4444;
+        }
+
+    .cart-summary {
+        background: #fff;
+        border: 1px solid #e7e8eb;
+        border-radius: 16px;
+        padding: 24px;
+        box-shadow: 0 5px 18px rgba(25, 26, 29, .04);
+    }
+
+        .cart-summary h3 {
+            font-size: 18px;
+            font-weight: 750;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 12px;
+        }
+
+    .summary-row {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 14px;
+        font-size: 15px;
+        color: #475569;
+    }
+
+        .summary-row.total {
+            font-size: 18px;
+            font-weight: 800;
+            color: #111;
+            border-top: 1px solid #eee;
+            padding-top: 16px;
+            margin-top: 16px;
+        }
+
+    .checkout-btn {
+        display: block;
+        width: 100%;
+        text-align: center;
+        background: #2563eb;
+        color: #fff;
+        padding: 14px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 750;
+        margin-top: 20px;
+        transition: background 0.2s;
+    }
+
+        .checkout-btn:hover {
+            background: #1d4ed8;
+        }
+
+    .continue-shopping {
+        display: block;
+        text-align: center;
+        margin-top: 14px;
+        color: #64748b;
+        font-size: 14px;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+        .continue-shopping:hover {
+            color: #2563eb;
+        }
+
+    .cart-empty {
+        text-align: center;
+        background: #fff;
+        border: 1px solid #e7e8eb;
+        border-radius: 16px;
+        padding: 60px 20px;
+        box-shadow: 0 5px 18px rgba(25, 26, 29, .04);
+    }
+
+    .empty-icon {
+        font-size: 50px;
+        color: #cbd5e1;
+        margin-bottom: 16px;
+    }
+
+    .cart-empty h2 {
+        font-size: 22px;
+        font-weight: 750;
+        margin-bottom: 8px;
+    }
+
+    .cart-empty p {
+        color: #64748b;
+        font-size: 14px;
+        margin-bottom: 20px;
+    }
+</style>

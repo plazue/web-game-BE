@@ -1,0 +1,179 @@
+﻿@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>mau</title>
+    <script src="https://kit.fontawesome.com/2ba83b9efc.js" crossorigin="anonymous"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .navbar {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px 40px;
+            background-color: #ffffff;
+            border-bottom: 1px solid #e5e5e5;
+            width: 100%;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .logo-text {
+            font-size: 22px;
+            font-weight: 300;
+            color: #222;
+            letter-spacing: -0.5px;
+        }
+
+        .nav-links ul {
+            display: flex;
+            list-style: none;
+            gap: 24px;
+        }
+
+        .nav-item {
+            text-decoration: none;
+            color: #111827;
+            font-weight: 600;
+            font-size: 15px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: color 0.2s ease;
+            white-space: nowrap;
+        }
+
+            .nav-item:hover {
+                color: #0056b3;
+            }
+
+            .nav-item i {
+                font-size: 11px;
+            }
+
+        .right-section {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            white-space: nowrap;
+        }
+
+        .search-box {
+            display: flex;
+            align-items: center;
+            background-color: #f3f4f6;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            padding: 8px 14px;
+            width: 260px;
+            white-space: nowrap;
+        }
+
+        .search-icon {
+            color: #6b7280;
+            font-size: 14px;
+            margin-right: 8px;
+            white-space: nowrap;
+        }
+
+        .search-box input {
+            border: none;
+            background: transparent;
+            outline: none;
+            width: 100%;
+            font-size: 14px;
+            color: #374151;
+            white-space: nowrap;
+        }
+
+            .search-box input::placeholder {
+                color: #9ca3af;
+            }
+
+        .user-icons {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            white-space: nowrap;
+        }
+
+        .icon-btn {
+            color: #111827;
+            font-size: 18px;
+            text-decoration: none;
+            transition: color 0.2s ease;
+            white-space: nowrap;
+        }
+
+            .icon-btn:hover {
+                color: #0056b3;
+            }
+
+
+        .header {
+            width: 100%;
+            background-color: #3b4d9b;
+            color: white;
+            padding: 40px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+
+    </style>
+</head>
+<body>
+
+    <div class="navbar">
+        <div class="logo">
+            <svg class="logo-icon" viewBox="0 0 100 100" width="35" height="35">
+                <circle cx="50" cy="50" r="45" fill="none" stroke="#111" stroke-width="4" />
+                <path d="M 30,50 Q 50,20 70,50 T 30,50" fill="none" stroke="#111" stroke-width="4" />
+            </svg>
+            <span class="logo-text">Phong Cách Xanh</span>
+        </div>
+
+        <nav class="nav-links">
+            <ul>
+                <li><a href="#" class="nav-item">Gaming Gear </a></li>
+                <li><a href="#" class="nav-item">Office Gear </a></li>
+                <li><a href="#" class="nav-item">Góc Game Thủ</a></li>
+                <li><a href="#" class="nav-item">Sản Phẩm 2N</a></li>
+                <li><a href="#" class="nav-item">Tích Điểm EXP</a></li>
+                <li><a href="#" class="nav-item">Liên Hệ</a></li>
+            </ul>
+        </nav>
+
+        <div class="right-section">
+            <div class="search-box">
+                <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                <input type="text" placeholder="Tìm chuột, bàn phím...">
+            </div>
+            <div class="user-icons">
+                <a href="#" class="icon-btn"><i class="fa-regular fa-circle-user"></i></a>
+                <a href="#" class="icon-btn"><i class="fa-solid fa-basket-shopping"></i></a>
+            </div>
+        </div>
+    </div> 
+
+    <header class="header">
+        <h1>HEADER</h1>
+    </header>
+
+</body>
+</html>

@@ -1,0 +1,57 @@
+﻿@model IEnumerable<template.Models.Product>
+
+<section class="section" id="best-seller">
+    <div class="section-heading">
+        <div>
+            <h2>Sản phẩm nổi bật</h2>
+            <p>Những sản phẩm nổi bật được game thủ quan tâm</p>
+        </div>
+        <a class="see-all" href="@Url.Action("ProductList", "Home2")">Xem tất cả <i class="fa-solid fa-arrow-right"></i></a>
+    </div>
+
+    <div class="product-grid" id="productGrid">
+        @{
+            var featureProducts = Model != null ? Model.Where(p => p.StockQuantity != null && p.StockQuantity > 0).Take(4).ToList() : new List<template.Models.Product>();
+        }
+
+        @if (featureProducts.Any())
+        {
+            foreach (var item in featureProducts)
+            {
+                <article class="product-card" data-name="@item.Title">
+                    <a href="@Url.Action("ProductDetail", "Home2", new { id = item.ProductID })">
+                        <div class="sale-tag">Hot</div>
+                        <div class="product-photo">
+                            <img src="@Url.Content(!string.IsNullOrEmpty(item.ProductImage) ? item.ProductImage : "~/Content/image2/thumb.jpg")" alt="@item.Title">
+                        </div>
+                        <div class="product-info">
+                            <div class="product-brand">@(item.Brand ?? "Phong Cách Xanh")</div>
+                            <h3 class="product-name">@item.Title</h3>
+                            <div class="product-price-row">
+                                @if (item.SalePrice != null && item.SalePrice > 0 && item.SalePrice < item.Price)
+                                {
+                                    <div class="price-box">
+                                        <strong class="product-price text-danger">@string.Format("{0:N0} ₫", item.SalePrice)</strong>
+                                        <span class="original-price">@string.Format("{0:N0} ₫", item.Price)</span>
+                                    </div>
+                                    <div class="sale-badge-label">Sale</div>
+                                }
+                                else
+                                {
+                                    <strong class="product-price">@string.Format("{0:N0} ₫", item.Price)</strong>
+                                }
+                                <span class="product-rating">★ 5.0</span>
+                            </div>
+                        </div>
+                    </a>
+                </article>
+            }
+        }
+        else
+        {
+            <div class="col-12 text-center py-4" style="grid-column: 1 / -1;">
+                <p style="color: #717680; font-size: 15px;">Chưa có sản phẩm nổi bật nào còn hàng.</p>
+            </div>
+        }
+    </div>
+</section>

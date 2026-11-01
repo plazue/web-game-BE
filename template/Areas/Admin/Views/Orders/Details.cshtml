@@ -1,0 +1,16 @@
+﻿@model template.Models.Order
+@{
+    ViewBag.Title = "Quản lý đơn hàng - Chi tiết";
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml"; // Hoặc layout admin của bạn
+}
+
+<div style="max-width: 900px; margin: 30px auto; padding: 0 15px;">
+    <div style="margin-bottom: 20px;">
+        <a href="@Url.Action("Index", "Orders", new { area = "Admin" })" style="text-decoration: none; color: #2b78a2; font-weight: 600; font-size: 14px;">
+            <i class="fa-solid fa-arrow-left"></i> Quay lại danh sách quản lý đơn
+        </a>
+    </div>
+
+    <!-- DÙNG CHUNG CÙNG 1 PARTIAL VIEW ĐỂ ĐẠT ĐIỂM TUYỆT ĐỐI -->
+    @Html.Partial("~/Areas/Customer/Views/Shared/_OrderDetailContent.cshtml", Model)
+</div>

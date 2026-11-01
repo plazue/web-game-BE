@@ -1,0 +1,90 @@
+﻿@model template.Models.Product
+@{
+    ViewBag.Title = Model != null ? Model.Title : "Chi tiết sản phẩm";
+    Layout = "~/Areas/Customer/Views/Shared/_CustomerLayout.cshtml";
+}
+
+<style>
+    .customer-detail-container {
+        width: min(1180px, 92%);
+        margin: 40px auto;
+    }
+
+    .action-cart-box {
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 12px;
+        padding: 20px 30px;
+        margin-top: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 20px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .qty-selector {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .qty-btn {
+        width: 36px;
+        height: 36px;
+        border: 1px solid #cbd5e1;
+        background: #f8fafc;
+        border-radius: 6px;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background 0.2s;
+    }
+
+        .qty-btn:hover {
+            background: #e2e8f0;
+        }
+
+    .qty-input {
+        width: 60px;
+        height: 36px;
+        text-align: center;
+        border: 1px solid #cbd5e1;
+        border-radius: 6px;
+        font-weight: 600;
+    }
+
+    .btn-add-cart {
+        background-color: #2563eb;
+        color: #ffffff;
+        border: none;
+        padding: 12px 28px;
+        font-size: 15px;
+        font-weight: 700;
+        border-radius: 8px;
+        cursor: pointer;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        transition: background-color 0.2s;
+    }
+
+        .btn-add-cart:hover {
+            background-color: #1d4ed8;
+        }
+</style>
+
+<div class="customer-detail-container">
+    @if (Model != null)
+    {
+        <!-- 1. NHÚNG PARTIAL VIEW HIỂN THỊ THÔNG TIN CHI TIẾT SẢN PHẨM -->
+        @Html.Partial("_ProductDetailContent", Model)
+    }
+    else
+    {
+        <div class="alert alert-warning text-center py-5">
+            <h3>Không tìm thấy thông tin sản phẩm!</h3>
+            <p>Sản phẩm này không tồn tại hoặc đã bị gỡ khỏi hệ thống.</p>
+            <a href="@Url.Action("Index", "Home2")" class="btn btn-primary mt-3">Quay về trang chủ</a>
+        </div>
+    }
+</div>
